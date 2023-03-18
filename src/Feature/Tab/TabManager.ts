@@ -62,12 +62,15 @@ export default class TabManager extends AbstractManager {
                 // return;
             // }
             result[file.path] = false;
-            const title = file ? this.resolver.resolve(file.path) : null;
+            let title = file ? this.resolver.resolve(file.path) : null;
             if (title && title !== leaf.tabHeaderInnerTitleEl.getText()) {
-                const numTitle = `${index + 1}. ${title}`;
-                leaf.tabHeaderInnerTitleEl.setText(numTitle);
                 result[file.path] = true;
             }
+            if (!title) {
+                title = file ? file.basename : null;
+            }
+            const numTitle = `${index + 1}. ${title}`;
+            leaf.tabHeaderInnerTitleEl.setText(numTitle);
         })
         return result;
     }
