@@ -55,18 +55,20 @@ export default class TabManager extends AbstractManager {
     private async innerUpdate(path: string = null): Promise<{ [k: string]: boolean }> {
         const leaves = this.facade.getLeavesOfType<MarkdownLeaf>("markdown");
         const result: { [k: string]: boolean } = {};
-        for (const leaf of leaves) {
+        // for (const leaf of leaves) {
+        leaves.forEach((leaf, index) => {
             const file = leaf.view?.file;
-            if (path && path !== file.path) {
-                continue;
-            }
+            // if (path && path !== file.path) {
+                // return;
+            // }
             result[file.path] = false;
             const title = file ? this.resolver.resolve(file.path) : null;
             if (title && title !== leaf.tabHeaderInnerTitleEl.getText()) {
-                leaf.tabHeaderInnerTitleEl.setText(title);
+                const numTitle = `${index + 1}. ${title}`;
+                leaf.tabHeaderInnerTitleEl.setText(numTitle);
                 result[file.path] = true;
             }
-        }
+        })
         return result;
     }
 
